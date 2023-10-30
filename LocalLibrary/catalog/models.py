@@ -3,6 +3,8 @@ from django.db import models
 # Create your models here.
 
 from django.urls import reverse  # To generate URLS by reversing URL patterns
+from django.contrib.auth.models import User
+from datetime import date
 
 
 class Genre(models.Model):
@@ -47,7 +49,6 @@ class Book(models.Model):
         ordering = ['title', 'author']
 
     def display_genre(self):
-        """Creates a string for the Genre. This is required to display genre in Admin."""
         return ', '.join([genre.name for genre in self.genre.all()[:3]])
 
     display_genre.short_description = 'Genre'
@@ -78,7 +79,6 @@ class BookInstance(models.Model):
 
     @property
     def is_overdue(self):
-        """Determines if the book is overdue based on due date and current date."""
         return bool(self.due_back and date.today() > self.due_back)
 
     LOAN_STATUS = (
